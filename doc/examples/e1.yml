@@ -1,0 +1,20 @@
+design: "my_device"
+author: "Ilya Dmitrichenko"
+
+employ: git, Icarus, Quartus, Modelsim
+
+simul:
+        ## in this case 'do_lint_only' is
+        ## the name of a method in Icarus
+        with_Icarus: do_lint_only
+        ## and here just keywords are used
+        with_Modelsim: local full display
+
+synth:
+        vendor: Altera
+        family: Cyclone
+        device: ABCDEFGH
+
+automate:
+## testbenches can be inherit by the suffix
+        tbsuffix: _test.vt

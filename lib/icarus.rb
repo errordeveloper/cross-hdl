@@ -5,11 +5,13 @@ class Icarus
 
   def initialize
 
+    @prefix = "/usr"
+
     ## for now put down everything:
     @dirs = {
-    :bin=> "/usr/bin/",
-    :lib=> "/usr/lib64/ivl/",
-    :inc=> "/usr/include/iverilog",
+    :bin=> "#{@prefix}/bin/",
+    :lib=> "#{@prefix}/lib64/ivl/",
+    :inc=> "#{@prefix}/include/iverilog",
     }
     ## can probably use RUBY_PLATFORM
     ## to check whether it's 64-bit
