@@ -3,9 +3,18 @@ require 'icarus_flags.rb'
 class Icarus
   include IcarusFlags
 
-  def initialize
+  def initialize(path_prefix = "/usr",
+		 name_prefix = "",
+		 name_suffix = "")
 
-    @prefix = "/usr"
+    ## I cannot see any rational way
+    ## to try setting anything other
+    ## then @prefix, if a user really
+    ## wants to use a funky layaout -
+    ## there is very little chance
+    ## for such mess to work :)
+
+    @prefix = path_prefix
 
     ## for now put down everything:
     @dirs = {
@@ -14,28 +23,37 @@ class Icarus
     :inc=> "#{@prefix}/include/iverilog",
     }
     ## can probably use RUBY_PLATFORM
-    ## to check whether it's 64-bit
+    ## to check whether it's 64-bit..
 
+    ## perhaps this can be a class or
+    ## a module, but leave it here for
+    ## now and see what it shall be!
     @cmds = {
     :generic => ## or :preproc ??
-      "#{@dirs[:bin]}iverilog",
+      "iverilog",
     :vpicomp =>
-      "#{@dirs[:bin]}iverilog-vpi",
+      "iverilog-vpi",
     :execute =>
-      "#{@dirs[:bin]}vvp"
+      "vvp",
     }
+    ## following may become a method
+    ## '.cmds_set_full_name'..
+    @cmds.each_pair do |k,v|
+      @cmds[k] = "#{@dirs[:bin]}#{name_prefix}#{v}#{name_suffix}"
+    end
 
     @verilog = @cmds[:generic]
 
     @vflags_all = self.read_flags
 
+    ## it may be a good idea to
+    ## move thse into IcarusFlags
     @default = [
       @warnings	[:all],
       @vstd	[:std2005],
       @vams	[:no],
     ]
 
-  end
 
   def get_default
     return @default
@@ -48,6 +66,7 @@ class Icarus
   ## If .set_command is needed
   ## then can use the '-B' flag
 
+  end
   def get_version
     version = `#{@verilog} -V`
     version = version.split("\n")[0]
